@@ -9,10 +9,11 @@ export default class Direct extends Component{
     }
     render() {
         const {section} = this.state
-        const content = section.map(({title, id, imageUrl, size}) => {
+        const content = section.map(({id,title , ...sectionValues}) => {
             const name = title.split('').map((i, e) => e === 0 ? i.toUpperCase() : i).join('')
-            return <MenuItem title={name} key={id} img={imageUrl} size={size}/>
+            return <MenuItem name={name} key={id} {...sectionValues}/>
         })
+
         return (
             <div className='directory-menu'>
                 {content}
