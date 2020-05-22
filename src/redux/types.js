@@ -1,0 +1,3 @@
+export const CURRENT_USER = 'APP/CURRENT_USER'
+export const DROP_DOWN = 'APP/DROP_DOWN'
+export const ADD_THING_CART = 'APP/ADD_THING_CART'

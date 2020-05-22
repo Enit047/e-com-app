@@ -2,14 +2,16 @@ import React, {Component} from "react"
 import './signIn.sass'
 import FormItem from "../form-Item/form-item";
 import CustomButt from "../customButt/customButt";
-import {signInWithGoogle} from "../../firebase/firebase";
+import {signInWithGoogle, auth} from "../../firebase/firebase"
 
 export default class SignIn extends Component{
     state = {
         email: '',
         password: '',
+
         errWithEmail: '',
-        errWithPass: ''
+        errWithPass: '',
+        errWithSignIn: ''
     }
 
     handlerInp = ({target}) => {
@@ -17,31 +19,46 @@ export default class SignIn extends Component{
         this.setState({[name]: value})
     }
 
-    handlerSub = (eve) => {
+    handlerSub = async (eve) => {
         eve.preventDefault()
         const {email, password} = this.state
 
-        const editEmail = email.slice(0 ,email.split('').findIndex(i => i === '@'))
-        const editPass = password.length < 6 ? false : true
-        const eEmail = editEmail.length < 3
-        const ePass = !editPass
-        if(eEmail && ePass){
-            this.setState({errWithEmail: 'Your email too short, you should try another.', errWithPass: 'Your password too short'})
-        } else if(eEmail){
-            this.setState({errWithEmail: 'Your email too short, you should try another.', errWithPass: ''})
-        } else if(ePass){
-            this.setState({errWithPass: 'Your password too short', errWithEmail: ''})
-        } else {
+        const findEm = email.split('').findIndex(i => i === '@')
+        const editEmail = email.slice(0 , findEm)
+        const verification = email.split('').filter(i => i === '@').length == 1
 
-            this.setState({email: '', password: '', errWithEmail: '', errWithPass: ''})
+        const checkerErr = (errElem, textMess) => {
+            const arrWithErr =
+                ['errWithEmail', 'errWithPass'].filter(i => i !== errElem)
+
+            const objState = {
+                [errElem]: textMess,
+            }
+            arrWithErr.map(i => objState[i] = '')
+            this.setState(objState)
+        }
+
+        if(editEmail.length < 3){
+            checkerErr('errWithEmail', 'Your email too short, you should try another :(')
+        } else if(!verification){
+            checkerErr('errWithEmail', 'Your email does not look right :(')
+        } else if(password.length < 6){
+            checkerErr('errWithPass', 'Your password too short :(')
+        }
+
+        try{
+            await auth.signInWithEmailAndPassword(email, password)
+            this.setState({email: '', password: '', errWithEmail: '', errWithPass: '', errWithSignIn: ''})
+        } catch (e) {
+            this.setState({errWithSignIn: 'Your email or password is wrong'})
         }
     }
 
     render() {
-        const {email, password, errWithEmail, errWithPass} = this.state
+        const {email, password, errWithEmail, errWithPass, errWithSignIn} = this.state
         return (
             <div className='sign-in'>
-                <h2>Sign in</h2>
+                <h2>Sign in {errWithSignIn ? <span>{errWithSignIn}</span> : ''}</h2>
                 <form onSubmit={this.handlerSub}>
                     {errWithEmail ? <span className='errWith'>{errWithEmail}</span> : ''}
 
@@ -62,7 +79,7 @@ export default class SignIn extends Component{
                         label='password'
                         handlerChange={this.handlerInp}/>
                     <div className="wrapper-button">
-                        <CustomButt>Sign in</CustomButt>
+                        <CustomButt type='submit'>Sign in</CustomButt>
                         <CustomButt onClick={() => signInWithGoogle()} isGoogleSignin>Sign in with Google</CustomButt>
                     </div>
                 </form>

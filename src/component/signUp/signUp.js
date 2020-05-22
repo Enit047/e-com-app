@@ -29,7 +29,6 @@ class SignUp extends Component{
             const arrWithErr =
                 ['errWithDisplay', 'errWithEmail', 'errWithPass',
                     'errWithConfirmPass', 'errWithExitsAcc'].filter(i => i !== errElem)
-
             const objState = {
                 [errElem]: textMess,
             }
@@ -51,7 +50,7 @@ class SignUp extends Component{
 
         try {
             const {user} = await auth.createUserWithEmailAndPassword(email, password)
-            this.create = await createUserProfileDoc(user, {displayName})
+            await createUserProfileDoc(user, {displayName})
 
             this.setState({
                 displayName: '',
@@ -77,9 +76,6 @@ class SignUp extends Component{
         })
     }
 
-    componentWillUnmount() {
-        this.create = null
-    }
 
     render() {
         const {email, password, confirmPass, displayName, errWithExitsAcc, errWithConfirmPass, errWithDisplay, errWithEmail, errWithPass} = this.state
@@ -128,7 +124,7 @@ class SignUp extends Component{
                     />
                     {errWithConfirmPass ? <span className='errWith'>{errWithConfirmPass}</span> : ''}
 
-                    <CustomButt>Sign up</CustomButt>
+                    <CustomButt type='submit'>Sign up</CustomButt>
                 </form>
             </div>
         );

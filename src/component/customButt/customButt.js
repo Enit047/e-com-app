@@ -1,8 +1,8 @@
 import React from "react"
-import './customButt.sass'
+import './customButt.scss'
 
-const CustomButt = ({isGoogleSignin, children, onClick}) => (
-    <button className={`${isGoogleSignin ? 'google-sign-in' : ''} custom-button`} onClick={onClick}>{children}</button>
+const CustomButt = ({type = 'button' ,isGoogleSignin, children, onClick}) => (
+    <button type={type}  className={`${isGoogleSignin ? 'google-sign-in' : ''} custom-button`} onClick={onClick}>{children}</button>
 )
 
 export default CustomButt
