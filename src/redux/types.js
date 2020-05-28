@@ -1,3 +1,6 @@
 export const CURRENT_USER = 'APP/CURRENT_USER'
 export const DROP_DOWN = 'APP/DROP_DOWN'
 export const ADD_THING_CART = 'APP/ADD_THING_CART'
+export const SIGN_OUT = 'APP/SIGN_OUT'
+export const DELETE_CART = 'APP/DELETE_CART'
+export const REMOVE_ONE_HALF = 'APP/REMOVE_ONE_HALF'

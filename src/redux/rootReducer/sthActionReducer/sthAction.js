@@ -1,4 +1,4 @@
-import {CURRENT_USER} from "../../types";
+import {CURRENT_USER, SIGN_OUT} from "../../types";
 
 const initialState = {
     currentUser: null
@@ -11,6 +11,11 @@ export const sthRootReducer = (state = initialState, action) => {
                 ...state,
                 currentUser: action.payload
             }
+        case SIGN_OUT:
+            return {
+                ...state,
+                currentUser: null
+        }
         default: return state
     }
 }

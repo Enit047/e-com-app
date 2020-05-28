@@ -1,23 +1,25 @@
-import React, {Component} from "react"
+import React from "react"
 import './directory.sass'
 import MenuItem from "../menu-item/menu-item"
-import {sections} from "./original";
+import {connect} from "react-redux";
+import {createStructuredSelector} from "reselect";
+import {reselectorStatic} from "../../redux/rootReducer/reducerForStaticData/reselectorReducer";
 
-export default class Direct extends Component{
-    state = {
-        section: sections
-    }
-    render() {
-        const {section} = this.state
-        const content = section.map(({id,title , ...sectionValues}) => {
-            const name = title.split('').map((i, e) => e === 0 ? i.toUpperCase() : i).join('')
-            return <MenuItem name={name} key={id} {...sectionValues}/>
-        })
+const Direct = ({section}) => {
+    const content = section.map(({id,title , ...sectionValues}) => {
+        const name = title.split('').map((i, e) => e === 0 ? i.toUpperCase() : i).join('')
+        return <MenuItem name={name} key={id} {...sectionValues}/>
+    })
 
-        return (
-            <div className='directory-menu'>
-                {content}
-            </div>
-        )
-    }
+    return (
+        <div className='directory-menu'>
+            {content}
+        </div>
+    )
 }
+
+const mapStateToProps = createStructuredSelector({
+    section: reselectorStatic
+})
+
+export default connect(mapStateToProps, null)(Direct)

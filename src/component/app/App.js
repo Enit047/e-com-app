@@ -1,15 +1,14 @@
 import React, {Component} from 'react'
 import HomePage from "../../pages/homepage/homepage"
 import './App.sass'
-import {Link, Route, Redirect} from 'react-router-dom'
+import {Route, Redirect} from 'react-router-dom'
 import ShopPage from "../../pages/shopPage/shopPage";
 import Header from "../header/header";
 import SignInAndSignUp from "../../pages/signInAndSignUp/signInAndSignUp";
 import { auth, createUserProfileDoc } from "../../firebase/firebase"
-import {AlreadySignIn} from "../alreadySignIn/alreadySignIn";
-import SignUp from "../signUp/signUp";
 import {actionSetCurrentUser} from "../../redux/actionCreators";
 import {connect} from "react-redux";
+import CheckOut from "../checkOut/checkOut";
 
 class App extends Component{
     unsubscribe = null
@@ -40,7 +39,8 @@ class App extends Component{
             <>
                 <Header/>
                 <Route path='/' exact component={HomePage}/>
-                <Route path='/shop' exact component={ShopPage}/>
+                <Route path='/shop'  component={ShopPage}/>
+                <Route path='/checkout' exact component={CheckOut}/>
                 <Route path='/signin' render={() => currentUser ? <Redirect to='/' /> : <SignInAndSignUp />}/>
             </>
         )

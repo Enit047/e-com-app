@@ -1,4 +1,5 @@
-import {ADD_THING_CART, DROP_DOWN} from "../../types";
+import {ADD_THING_CART, DELETE_CART, DROP_DOWN, REMOVE_ONE_HALF} from "../../types";
+import {handlerForAddingCart, handlerForRemoveCart} from "./editionForSomeEctions";
 
 const initialState = {
     dropCart: false,
@@ -13,23 +14,20 @@ export const otherRootReducer = (state = initialState, action) => {
                 dropCart: action.payload
             }
         case ADD_THING_CART:
-            const sameCard = state.addedCart.find(({id}) => id === action.payload.id)
-            const newStateAdded = state.addedCart.filter(({id}) => id !== action.payload.id)
-            const newObj = sameCard
-                ? {
-                    ...sameCard,
-                    quantity: sameCard.quantity + 1
-                }
-                : {
-                    ...action.payload,
-                    quantity: 1
-                }
             return {
                 ...state,
-                addedCart: [
-                    ...newStateAdded,
-                    newObj
-                ]
+                addedCart: handlerForAddingCart(state.addedCart, action.payload)
+            }
+        case DELETE_CART:
+            const newAddedCart = state.addedCart.filter(({id}) => id !== action.id)
+            return {
+                ...state,
+                addedCart: [...newAddedCart]
+            }
+        case REMOVE_ONE_HALF:
+            return {
+                ...state,
+                addedCart: handlerForRemoveCart(state.addedCart, action.payload)
             }
         default: return state
     }
